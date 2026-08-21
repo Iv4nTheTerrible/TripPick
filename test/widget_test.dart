@@ -1,30 +1,51 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-
-import 'package:c/main.dart';
+import 'package:travel_recommender/app.dart';
+import 'package:travel_recommender/data/fake_recommendation_repository.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+  testWidgets('renders the English form and three fake recommendations', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      const TripPickApp(
+        initialLocale: Locale('en'),
+        repository: FakeRecommendationRepository(delay: Duration.zero),
+      ),
+    );
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+    expect(find.text('Not sure where to go next?'), findsOneWidget);
+    expect(find.byKey(const Key('submitPreferences')), findsOneWidget);
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+    await tester.ensureVisible(find.byKey(const Key('submitPreferences')));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const Key('submitPreferences')));
+    await tester.pumpAndSettle();
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    expect(find.byKey(const Key('recommendationResults')), findsOneWidget);
+    expect(find.text('Kyoto · JP'), findsOneWidget);
+    expect(find.text('Kanazawa · JP'), findsOneWidget);
+    expect(find.text('Sapporo · JP'), findsOneWidget);
+    expect(find.text('Open in Google Maps'), findsNWidgets(3));
+  });
+
+  testWidgets('switches between Japanese and English', (tester) async {
+    var savedLanguage = '';
+    await tester.pumpWidget(
+      TripPickApp(
+        initialLocale: const Locale('ja'),
+        repository: const FakeRecommendationRepository(delay: Duration.zero),
+        onLocaleChanged: (locale) async {
+          savedLanguage = locale.languageCode;
+        },
+      ),
+    );
+
+    expect(find.text('次の旅先が決まらない？'), findsOneWidget);
+    await tester.tap(find.text('EN'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Not sure where to go next?'), findsOneWidget);
+    expect(savedLanguage, 'en');
   });
 }
