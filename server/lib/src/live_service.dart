@@ -3,16 +3,22 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 import 'models.dart';
+import 'wikimedia_image_service.dart';
 
 abstract interface class CandidateGenerator {
   Future<List<DestinationCandidate>> generate(RecommendationRequest request);
 }
 
 class LiveRecommendationEngine implements RecommendationEngine {
-  const LiveRecommendationEngine({required CandidateGenerator generator})
-    : _generator = generator;
+  const LiveRecommendationEngine({
+    required CandidateGenerator generator,
+    DestinationImageResolver imageResolver =
+        const EmptyDestinationImageResolver(),
+  }) : _generator = generator,
+       _imageResolver = imageResolver;
 
   final CandidateGenerator _generator;
+  final DestinationImageResolver _imageResolver;
 
   @override
   Future<List<Map<String, Object?>>> recommend(
@@ -36,7 +42,7 @@ class LiveRecommendationEngine implements RecommendationEngine {
         status: 503,
       );
     }
-    return candidates.take(3).map(_toRecommendation).toList(growable: false);
+    return Future.wait(candidates.take(3).map(_toRecommendation));
   }
 
   bool _matchesScope(String countryCode, RecommendationRequest request) {
@@ -45,17 +51,28 @@ class LiveRecommendationEngine implements RecommendationEngine {
         : countryCode != request.originCountry;
   }
 
-  Map<String, Object?> _toRecommendation(DestinationCandidate candidate) {
+  Future<Map<String, Object?>> _toRecommendation(
+    DestinationCandidate candidate,
+  ) async {
     final cityQuery = Uri.encodeComponent(
       '${candidate.city}, ${candidate.countryCode}',
     );
     final slug = _slug(candidate.city);
+    WikimediaPhoto photo;
+    try {
+      photo = await _imageResolver.resolve(
+        imageSearchTerm: candidate.imageSearchTerm,
+        countryCode: candidate.countryCode,
+      );
+    } catch (_) {
+      photo = const WikimediaPhoto.empty();
+    }
     return {
       'placeId': 'gemini-${candidate.countryCode.toLowerCase()}-$slug',
       'city': candidate.city,
       'countryCode': candidate.countryCode,
       'reason': candidate.reason,
-      'photo': {'url': '', 'attribution': ''},
+      'photo': photo.toJson(),
       'mapsUri': 'https://www.google.com/maps/search/?api=1&query=$cityQuery',
       'highlights': candidate.highlights.indexed
           .map((entry) {
@@ -117,7 +134,8 @@ Trip length: ${request.tripDays} days
 Travel month: $month
 Interests: ${request.interests.join(', ')}
 Write each short reason and all attraction names in $language.
-For each city, provide exactly three well-known real attractions and an ISO 3166-1 alpha-2 country code.
+For each city, provide exactly three well-known real attractions, an ISO 3166-1 alpha-2 country code, and imageSearchTerm containing the canonical English Wikipedia city article title.
+imageSearchTerm must always be English even when the other text is Japanese.
 Do not invent businesses, prices, ratings, opening hours, or current availability.
 ''';
     final body = <String, Object?>{
@@ -142,11 +160,18 @@ Do not invent businesses, prices, ratings, opening hours, or current availabilit
               'maxItems': 6,
               'items': {
                 'type': 'OBJECT',
-                'required': ['city', 'countryCode', 'reason', 'highlights'],
+                'required': [
+                  'city',
+                  'countryCode',
+                  'reason',
+                  'imageSearchTerm',
+                  'highlights',
+                ],
                 'properties': {
                   'city': {'type': 'STRING'},
                   'countryCode': {'type': 'STRING'},
                   'reason': {'type': 'STRING'},
+                  'imageSearchTerm': {'type': 'STRING'},
                   'highlights': {
                     'type': 'ARRAY',
                     'minItems': 3,

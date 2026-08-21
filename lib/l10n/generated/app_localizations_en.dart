@@ -22,6 +22,18 @@ class AppLocalizationsEn extends AppLocalizations {
       'Tell us what kind of trip you want. TripPick will suggest three cities and explain why each one fits.';
 
   @override
+  String get heroBadge => 'PERSONAL TRIP FINDER';
+
+  @override
+  String get quickSetup => 'Takes less than a minute';
+
+  @override
+  String get threeMatches => 'Three tailored city matches';
+
+  @override
+  String get realPlaces => 'Real photos and map links';
+
+  @override
   String get language => 'Language';
 
   @override
@@ -124,6 +136,11 @@ class AppLocalizationsEn extends AppLocalizations {
       'Three ideas selected from your preferences. Open any place in Google Maps to explore further.';
 
   @override
+  String matchNumber(int rank) {
+    return 'Match #$rank';
+  }
+
+  @override
   String get highlights => 'Highlights';
 
   @override
@@ -158,6 +175,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get photoUnavailable => 'Destination photo unavailable';
+
+  @override
+  String get photoSource => 'Open photo source on Wikimedia Commons';
+
+  @override
+  String get photoSourceError => 'Could not open the photo source.';
 
   @override
   String get poweredByGoogle => 'Links open in Google Maps';

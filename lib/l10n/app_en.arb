@@ -4,6 +4,10 @@
   "appTagline": "Three places that fit your trip",
   "heroTitle": "Not sure where to go next?",
   "heroBody": "Tell us what kind of trip you want. TripPick will suggest three cities and explain why each one fits.",
+  "heroBadge": "PERSONAL TRIP FINDER",
+  "quickSetup": "Takes less than a minute",
+  "threeMatches": "Three tailored city matches",
+  "realPlaces": "Real photos and map links",
   "language": "Language",
   "english": "English",
   "japanese": "日本語",
@@ -37,6 +41,12 @@
   "loadingBody": "We are matching your preferences with destination ideas.",
   "resultsTitle": "Your recommended destinations",
   "resultsSubtitle": "Three ideas selected from your preferences. Open any place in Google Maps to explore further.",
+  "matchNumber": "Match #{rank}",
+  "@matchNumber": {
+    "placeholders": {
+      "rank": {"type": "int"}
+    }
+  },
   "highlights": "Highlights",
   "openMaps": "Open in Google Maps",
   "editPreferences": "Edit preferences",
@@ -48,6 +58,8 @@
   "connectionError": "Could not connect to the local TripPick server. Check that it is running on port 8080.",
   "mapsError": "Could not open Google Maps.",
   "photoUnavailable": "Destination photo unavailable",
+  "photoSource": "Open photo source on Wikimedia Commons",
+  "photoSourceError": "Could not open the photo source.",
   "poweredByGoogle": "Links open in Google Maps",
   "budgetNote": "Budget is a soft preference and does not include flights, hotels, or exact trip costs.",
   "stepPreferences": "1. Preferences",

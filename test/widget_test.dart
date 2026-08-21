@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:travel_recommender/app.dart';
 import 'package:travel_recommender/data/fake_recommendation_repository.dart';
+import 'package:travel_recommender/data/recommendation_repository.dart';
+import 'package:travel_recommender/domain/recommendation.dart';
+import 'package:travel_recommender/domain/travel_preferences.dart';
 
 void main() {
   testWidgets('renders the English form and three fake recommendations', (
@@ -23,9 +26,10 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.byKey(const Key('recommendationResults')), findsOneWidget);
-    expect(find.text('Kyoto · JP'), findsOneWidget);
-    expect(find.text('Kanazawa · JP'), findsOneWidget);
-    expect(find.text('Sapporo · JP'), findsOneWidget);
+    expect(find.text('Kyoto'), findsOneWidget);
+    expect(find.text('Kanazawa'), findsOneWidget);
+    expect(find.text('Sapporo'), findsOneWidget);
+    expect(find.text('Match #1'), findsOneWidget);
     expect(find.text('Open in Google Maps'), findsNWidgets(3));
   });
 
@@ -48,4 +52,61 @@ void main() {
     expect(find.text('Not sure where to go next?'), findsOneWidget);
     expect(savedLanguage, 'en');
   });
+
+  testWidgets('renders a city photo with clickable Commons attribution', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      const TripPickApp(
+        initialLocale: Locale('en'),
+        repository: _PhotoRepository(),
+      ),
+    );
+    await tester.ensureVisible(find.byKey(const Key('submitPreferences')));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const Key('submitPreferences')));
+    await tester.pump();
+    await tester.pump();
+
+    expect(find.byType(Image), findsWidgets);
+    final attribution = find.byKey(const Key('photoAttribution-City 1'));
+    expect(attribution, findsOneWidget);
+    expect(tester.widget<InkWell>(attribution).onTap, isNotNull);
+    expect(find.text('Author · CC BY-SA 4.0'), findsNWidgets(3));
+  });
+}
+
+class _PhotoRepository implements RecommendationRepository {
+  const _PhotoRepository();
+
+  @override
+  Future<List<DestinationRecommendation>> fetch(
+    TravelPreferences preferences,
+  ) async {
+    return List.generate(
+      3,
+      (index) => DestinationRecommendation(
+        placeId: 'city-$index',
+        city: 'City ${index + 1}',
+        countryCode: 'JP',
+        reason: 'Reason',
+        photo: const PlacePhoto(
+          url: 'https://upload.wikimedia.org/photo.jpg',
+          attribution: 'Author · CC BY-SA 4.0',
+          sourceUrl: 'https://commons.wikimedia.org/wiki/File:Photo.jpg',
+          licenseUrl: 'https://creativecommons.org/licenses/by-sa/4.0/',
+        ),
+        mapsUri: 'https://maps.example/city',
+        highlights: List.generate(
+          3,
+          (highlight) => DestinationHighlight(
+            placeId: 'highlight-$index-$highlight',
+            name: 'Highlight $highlight',
+            mapsUri: 'https://maps.example/highlight',
+            photoUrl: '',
+          ),
+        ),
+      ),
+    );
+  }
 }

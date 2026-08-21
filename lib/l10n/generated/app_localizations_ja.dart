@@ -21,6 +21,18 @@ class AppLocalizationsJa extends AppLocalizations {
   String get heroBody => '希望する旅のスタイルを教えてください。あなたに合う3つの都市と、その理由を提案します。';
 
   @override
+  String get heroBadge => 'あなた専用の旅先検索';
+
+  @override
+  String get quickSetup => '入力は1分以内';
+
+  @override
+  String get threeMatches => 'あなたに合う3つの都市';
+
+  @override
+  String get realPlaces => '実際の写真と地図リンク';
+
+  @override
   String get language => '言語';
 
   @override
@@ -121,6 +133,11 @@ class AppLocalizationsJa extends AppLocalizations {
   String get resultsSubtitle => '希望条件に合う3つの候補です。Google マップで詳しい情報を確認できます。';
 
   @override
+  String matchNumber(int rank) {
+    return '候補 #$rank';
+  }
+
+  @override
   String get highlights => 'おすすめスポット';
 
   @override
@@ -153,6 +170,12 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get photoUnavailable => '旅行先の写真はありません';
+
+  @override
+  String get photoSource => 'Wikimedia Commonsで写真の出典を開く';
+
+  @override
+  String get photoSourceError => '写真の出典を開けませんでした。';
 
   @override
   String get poweredByGoogle => 'リンクはGoogle マップで開きます';

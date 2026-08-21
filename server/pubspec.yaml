@@ -7,6 +7,7 @@ environment:
   sdk: ^3.11.5
 
 dependencies:
+  html: ^0.15.6
   http: ^1.6.0
   shelf: ^1.4.2
 

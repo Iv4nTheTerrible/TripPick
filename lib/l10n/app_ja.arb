@@ -4,6 +4,10 @@
   "appTagline": "あなたに合う3つの旅先",
   "heroTitle": "次の旅先が決まらない？",
   "heroBody": "希望する旅のスタイルを教えてください。あなたに合う3つの都市と、その理由を提案します。",
+  "heroBadge": "あなた専用の旅先検索",
+  "quickSetup": "入力は1分以内",
+  "threeMatches": "あなたに合う3つの都市",
+  "realPlaces": "実際の写真と地図リンク",
   "language": "言語",
   "english": "English",
   "japanese": "日本語",
@@ -37,6 +41,12 @@
   "loadingBody": "希望条件に合う旅先の候補を比較しています。",
   "resultsTitle": "おすすめの旅先",
   "resultsSubtitle": "希望条件に合う3つの候補です。Google マップで詳しい情報を確認できます。",
+  "matchNumber": "候補 #{rank}",
+  "@matchNumber": {
+    "placeholders": {
+      "rank": {"type": "int"}
+    }
+  },
   "highlights": "おすすめスポット",
   "openMaps": "Google マップで開く",
   "editPreferences": "条件を編集",
@@ -48,6 +58,8 @@
   "connectionError": "ローカルのTripPickサーバーに接続できません。ポート8080で起動しているか確認してください。",
   "mapsError": "Google マップを開けませんでした。",
   "photoUnavailable": "旅行先の写真はありません",
+  "photoSource": "Wikimedia Commonsで写真の出典を開く",
+  "photoSourceError": "写真の出典を開けませんでした。",
   "poweredByGoogle": "リンクはGoogle マップで開きます",
   "budgetNote": "予算は目安です。航空券、ホテル、正確な旅行費用は含まれません。",
   "stepPreferences": "1. 希望条件",

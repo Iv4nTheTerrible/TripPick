@@ -28,6 +28,7 @@ Future<void> main() async {
         apiKey: geminiKey,
         model: values['GEMINI_MODEL'] ?? 'gemini-3.5-flash-lite',
       ),
+      imageResolver: WikimediaImageResolver(),
     );
   }
 

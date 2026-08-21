@@ -122,6 +122,30 @@ abstract class AppLocalizations {
   /// **'Tell us what kind of trip you want. TripPick will suggest three cities and explain why each one fits.'**
   String get heroBody;
 
+  /// No description provided for @heroBadge.
+  ///
+  /// In en, this message translates to:
+  /// **'PERSONAL TRIP FINDER'**
+  String get heroBadge;
+
+  /// No description provided for @quickSetup.
+  ///
+  /// In en, this message translates to:
+  /// **'Takes less than a minute'**
+  String get quickSetup;
+
+  /// No description provided for @threeMatches.
+  ///
+  /// In en, this message translates to:
+  /// **'Three tailored city matches'**
+  String get threeMatches;
+
+  /// No description provided for @realPlaces.
+  ///
+  /// In en, this message translates to:
+  /// **'Real photos and map links'**
+  String get realPlaces;
+
   /// No description provided for @language.
   ///
   /// In en, this message translates to:
@@ -320,6 +344,12 @@ abstract class AppLocalizations {
   /// **'Three ideas selected from your preferences. Open any place in Google Maps to explore further.'**
   String get resultsSubtitle;
 
+  /// No description provided for @matchNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Match #{rank}'**
+  String matchNumber(int rank);
+
   /// No description provided for @highlights.
   ///
   /// In en, this message translates to:
@@ -385,6 +415,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Destination photo unavailable'**
   String get photoUnavailable;
+
+  /// No description provided for @photoSource.
+  ///
+  /// In en, this message translates to:
+  /// **'Open photo source on Wikimedia Commons'**
+  String get photoSource;
+
+  /// No description provided for @photoSourceError.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not open the photo source.'**
+  String get photoSourceError;
 
   /// No description provided for @poweredByGoogle.
   ///

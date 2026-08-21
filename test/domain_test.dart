@@ -38,4 +38,19 @@ void main() {
       throwsFormatException,
     );
   });
+
+  test('parses expanded and legacy photo metadata compatibly', () {
+    final expanded = PlacePhoto.fromJson({
+      'url': 'https://upload.wikimedia.org/photo.jpg',
+      'attribution': 'Jane Doe · CC BY-SA 4.0',
+      'sourceUrl': 'https://commons.wikimedia.org/wiki/File:Photo.jpg',
+      'licenseUrl': 'https://creativecommons.org/licenses/by-sa/4.0/',
+    });
+    final legacy = PlacePhoto.fromJson({'url': '', 'attribution': ''});
+
+    expect(expanded.sourceUrl, contains('commons.wikimedia.org'));
+    expect(expanded.licenseUrl, contains('creativecommons.org'));
+    expect(legacy.sourceUrl, isEmpty);
+    expect(legacy.licenseUrl, isEmpty);
+  });
 }

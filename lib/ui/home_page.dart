@@ -129,19 +129,39 @@ class _HomePageState extends State<HomePage> {
                 onLocaleChanged: widget.onLocaleChanged,
               ),
             ),
-            SliverToBoxAdapter(child: _Hero(strings: strings)),
             SliverPadding(
-              padding: const EdgeInsets.fromLTRB(20, 8, 20, 40),
+              padding: const EdgeInsets.fromLTRB(20, 10, 20, 56),
               sliver: SliverToBoxAdapter(
                 child: Center(
                   child: ConstrainedBox(
-                    constraints: const BoxConstraints(maxWidth: 1180),
-                    child: Column(
-                      children: [
-                        _buildFormCard(strings),
-                        const SizedBox(height: 32),
-                        _buildStatusSection(strings),
-                      ],
+                    constraints: const BoxConstraints(maxWidth: 1240),
+                    child: LayoutBuilder(
+                      builder: (context, constraints) {
+                        final isWide = constraints.maxWidth >= 960;
+                        return Column(
+                          children: [
+                            if (isWide)
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  SizedBox(
+                                    width: 390,
+                                    child: _Hero(strings: strings),
+                                  ),
+                                  const SizedBox(width: 24),
+                                  Expanded(child: _buildFormCard(strings)),
+                                ],
+                              )
+                            else ...[
+                              _Hero(strings: strings),
+                              const SizedBox(height: 18),
+                              _buildFormCard(strings),
+                            ],
+                            const SizedBox(height: 40),
+                            _buildStatusSection(strings),
+                          ],
+                        );
+                      },
                     ),
                   ),
                 ),
@@ -157,7 +177,7 @@ class _HomePageState extends State<HomePage> {
     return Card(
       key: _formSectionKey,
       child: Padding(
-        padding: const EdgeInsets.all(28),
+        padding: const EdgeInsets.all(26),
         child: Form(
           key: _formKey,
           child: Column(
@@ -173,7 +193,7 @@ class _HomePageState extends State<HomePage> {
               ),
               const SizedBox(height: 8),
               Text(strings.preferencesSubtitle),
-              const SizedBox(height: 28),
+              const SizedBox(height: 24),
               LayoutBuilder(
                 builder: (context, constraints) {
                   final isWide = constraints.maxWidth >= 720;
@@ -233,51 +253,76 @@ class _HomePageState extends State<HomePage> {
                   );
                 },
               ),
-              const SizedBox(height: 26),
-              _FieldLabel(strings.travelScope),
-              const SizedBox(height: 10),
-              SegmentedButton<TravelScope>(
-                key: const Key('travelScope'),
-                segments: [
-                  ButtonSegment(
-                    value: TravelScope.domestic,
-                    icon: const Icon(Icons.home_outlined),
-                    label: Text(strings.domestic),
-                  ),
-                  ButtonSegment(
-                    value: TravelScope.international,
-                    icon: const Icon(Icons.flight_takeoff),
-                    label: Text(strings.international),
-                  ),
-                ],
-                selected: {_scope},
-                onSelectionChanged: (value) =>
-                    setState(() => _scope = value.first),
+              const SizedBox(height: 22),
+              LayoutBuilder(
+                builder: (context, constraints) {
+                  final isWide = constraints.maxWidth >= 640;
+                  final scope = _ChoiceField(
+                    label: strings.travelScope,
+                    child: SizedBox(
+                      width: double.infinity,
+                      child: SegmentedButton<TravelScope>(
+                        key: const Key('travelScope'),
+                        segments: [
+                          ButtonSegment(
+                            value: TravelScope.domestic,
+                            icon: const Icon(Icons.home_outlined),
+                            label: Text(strings.domestic),
+                          ),
+                          ButtonSegment(
+                            value: TravelScope.international,
+                            icon: const Icon(Icons.flight_takeoff),
+                            label: Text(strings.international),
+                          ),
+                        ],
+                        selected: {_scope},
+                        onSelectionChanged: (value) =>
+                            setState(() => _scope = value.first),
+                      ),
+                    ),
+                  );
+                  final budget = _ChoiceField(
+                    label: strings.budget,
+                    child: SizedBox(
+                      width: double.infinity,
+                      child: SegmentedButton<BudgetLevel>(
+                        key: const Key('budgetLevel'),
+                        segments: [
+                          ButtonSegment(
+                            value: BudgetLevel.low,
+                            label: Text(strings.low),
+                          ),
+                          ButtonSegment(
+                            value: BudgetLevel.medium,
+                            label: Text(strings.medium),
+                          ),
+                          ButtonSegment(
+                            value: BudgetLevel.high,
+                            label: Text(strings.high),
+                          ),
+                        ],
+                        selected: {_budget},
+                        onSelectionChanged: (value) =>
+                            setState(() => _budget = value.first),
+                      ),
+                    ),
+                  );
+                  if (!isWide) {
+                    return Column(
+                      children: [scope, const SizedBox(height: 20), budget],
+                    );
+                  }
+                  return Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(child: scope),
+                      const SizedBox(width: 18),
+                      Expanded(child: budget),
+                    ],
+                  );
+                },
               ),
-              const SizedBox(height: 26),
-              _FieldLabel(strings.budget),
-              const SizedBox(height: 10),
-              SegmentedButton<BudgetLevel>(
-                key: const Key('budgetLevel'),
-                segments: [
-                  ButtonSegment(
-                    value: BudgetLevel.low,
-                    label: Text(strings.low),
-                  ),
-                  ButtonSegment(
-                    value: BudgetLevel.medium,
-                    label: Text(strings.medium),
-                  ),
-                  ButtonSegment(
-                    value: BudgetLevel.high,
-                    label: Text(strings.high),
-                  ),
-                ],
-                selected: {_budget},
-                onSelectionChanged: (value) =>
-                    setState(() => _budget = value.first),
-              ),
-              const SizedBox(height: 26),
+              const SizedBox(height: 22),
               _FieldLabel(strings.interests),
               const SizedBox(height: 6),
               Text(
@@ -308,33 +353,30 @@ class _HomePageState extends State<HomePage> {
                   );
                 }).toList(),
               ),
-              const SizedBox(height: 26),
-              ConstrainedBox(
-                constraints: const BoxConstraints(maxWidth: 360),
-                child: DropdownButtonFormField<int?>(
-                  key: const Key('travelMonth'),
-                  initialValue: _travelMonth,
-                  decoration: InputDecoration(
-                    labelText: strings.travelMonth,
-                    prefixIcon: const Icon(Icons.calendar_month_outlined),
-                  ),
-                  items: [
-                    DropdownMenuItem<int?>(
-                      value: null,
-                      child: Text(strings.anyMonth),
-                    ),
-                    ...List.generate(
-                      12,
-                      (index) => DropdownMenuItem<int?>(
-                        value: index + 1,
-                        child: Text(_monthLabel(strings, index + 1)),
-                      ),
-                    ),
-                  ],
-                  onChanged: (value) => setState(() => _travelMonth = value),
+              const SizedBox(height: 22),
+              DropdownButtonFormField<int?>(
+                key: const Key('travelMonth'),
+                initialValue: _travelMonth,
+                decoration: InputDecoration(
+                  labelText: strings.travelMonth,
+                  prefixIcon: const Icon(Icons.calendar_month_outlined),
                 ),
+                items: [
+                  DropdownMenuItem<int?>(
+                    value: null,
+                    child: Text(strings.anyMonth),
+                  ),
+                  ...List.generate(
+                    12,
+                    (index) => DropdownMenuItem<int?>(
+                      value: index + 1,
+                      child: Text(_monthLabel(strings, index + 1)),
+                    ),
+                  ),
+                ],
+                onChanged: (value) => setState(() => _travelMonth = value),
               ),
-              const SizedBox(height: 24),
+              const SizedBox(height: 18),
               Container(
                 padding: const EdgeInsets.all(14),
                 decoration: BoxDecoration(
@@ -354,16 +396,23 @@ class _HomePageState extends State<HomePage> {
                   ],
                 ),
               ),
-              const SizedBox(height: 24),
+              const SizedBox(height: 18),
               SizedBox(
                 width: double.infinity,
                 child: FilledButton.icon(
                   key: const Key('submitPreferences'),
                   onPressed: _canSubmit ? _submit : null,
-                  icon: const Icon(Icons.auto_awesome),
+                  icon: const Icon(Icons.auto_awesome_rounded),
                   label: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 14),
-                    child: Text(strings.findDestinations),
+                    padding: const EdgeInsets.symmetric(vertical: 13),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(strings.findDestinations),
+                        const SizedBox(width: 8),
+                        const Icon(Icons.arrow_forward_rounded, size: 18),
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -422,19 +471,19 @@ class _TopBar extends StatelessWidget {
   Widget build(BuildContext context) {
     final strings = AppLocalizations.of(context);
     return Container(
-      color: const Color(0xFFF6F2E9),
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+      color: const Color(0xFFF8F5EE),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
       child: Center(
         child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 1180),
+          constraints: const BoxConstraints(maxWidth: 1240),
           child: Row(
             children: [
               Container(
-                width: 42,
-                height: 42,
+                width: 44,
+                height: 44,
                 decoration: BoxDecoration(
                   color: Theme.of(context).colorScheme.primary,
-                  borderRadius: BorderRadius.circular(13),
+                  borderRadius: BorderRadius.circular(14),
                 ),
                 child: const Icon(Icons.explore, color: Colors.white),
               ),
@@ -446,7 +495,7 @@ class _TopBar extends StatelessWidget {
                     Text(
                       strings.appName,
                       style: const TextStyle(
-                        fontSize: 20,
+                        fontSize: 21,
                         fontWeight: FontWeight.w900,
                       ),
                     ),
@@ -487,45 +536,127 @@ class _Hero extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.fromLTRB(20, 4, 20, 28),
-      padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 50),
+      constraints: const BoxConstraints(minHeight: 440),
+      padding: const EdgeInsets.fromLTRB(30, 32, 30, 28),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(30),
+        borderRadius: BorderRadius.circular(28),
         gradient: const LinearGradient(
-          colors: [Color(0xFF0D615A), Color(0xFF1E887A), Color(0xFFDB9E51)],
+          colors: [Color(0xFF0A514E), Color(0xFF12786E), Color(0xFF309583)],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
+        boxShadow: const [
+          BoxShadow(
+            color: Color(0x24104F49),
+            blurRadius: 30,
+            offset: Offset(0, 16),
+          ),
+        ],
       ),
-      child: Center(
-        child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 820),
-          child: Column(
+      child: Stack(
+        children: [
+          Positioned(
+            right: -28,
+            top: -30,
+            child: Icon(
+              Icons.public,
+              size: 180,
+              color: Colors.white.withValues(alpha: 0.07),
+            ),
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Icon(Icons.flight_rounded, color: Colors.white, size: 42),
-              const SizedBox(height: 16),
+              Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 7,
+                ),
+                decoration: BoxDecoration(
+                  color: Colors.white.withValues(alpha: 0.14),
+                  borderRadius: BorderRadius.circular(99),
+                  border: Border.all(
+                    color: Colors.white.withValues(alpha: 0.2),
+                  ),
+                ),
+                child: Text(
+                  strings.heroBadge,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 12,
+                    fontWeight: FontWeight.w800,
+                    letterSpacing: 0.8,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 28),
               Text(
                 strings.heroTitle,
-                textAlign: TextAlign.center,
                 style: Theme.of(context).textTheme.displaySmall?.copyWith(
                   color: Colors.white,
                   fontWeight: FontWeight.w900,
-                  height: 1.1,
+                  height: 1.08,
+                  letterSpacing: -0.7,
                 ),
               ),
-              const SizedBox(height: 14),
+              const SizedBox(height: 16),
               Text(
                 strings.heroBody,
-                textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                  color: Colors.white,
-                  height: 1.5,
+                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                  color: Colors.white.withValues(alpha: 0.88),
+                  height: 1.55,
                 ),
+              ),
+              const SizedBox(height: 28),
+              _HeroBenefit(icon: Icons.bolt_rounded, label: strings.quickSetup),
+              const SizedBox(height: 12),
+              _HeroBenefit(
+                icon: Icons.auto_awesome_rounded,
+                label: strings.threeMatches,
+              ),
+              const SizedBox(height: 12),
+              _HeroBenefit(
+                icon: Icons.photo_camera_outlined,
+                label: strings.realPlaces,
               ),
             ],
           ),
-        ),
+        ],
       ),
+    );
+  }
+}
+
+class _HeroBenefit extends StatelessWidget {
+  const _HeroBenefit({required this.icon, required this.label});
+
+  final IconData icon;
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Container(
+          width: 32,
+          height: 32,
+          decoration: BoxDecoration(
+            color: const Color(0xFFFFDDA5).withValues(alpha: 0.18),
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: Icon(icon, size: 18, color: const Color(0xFFFFD89A)),
+        ),
+        const SizedBox(width: 11),
+        Expanded(
+          child: Text(
+            label,
+            style: const TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
@@ -546,72 +677,105 @@ class _ResultsSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return Container(
       key: const Key('recommendationResults'),
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        _SectionEyebrow(label: strings.stepResults),
-        const SizedBox(height: 10),
-        Text(
-          strings.resultsTitle,
-          style: Theme.of(
-            context,
-          ).textTheme.headlineMedium?.copyWith(fontWeight: FontWeight.w900),
-        ),
-        const SizedBox(height: 8),
-        Text(strings.resultsSubtitle),
-        const SizedBox(height: 24),
-        LayoutBuilder(
-          builder: (context, constraints) {
-            final columns = constraints.maxWidth >= 980
-                ? 3
-                : constraints.maxWidth >= 640
-                ? 2
-                : 1;
-            final width =
-                (constraints.maxWidth - ((columns - 1) * 18)) / columns;
-            return Wrap(
-              spacing: 18,
-              runSpacing: 18,
-              children: recommendations
-                  .map(
-                    (recommendation) => SizedBox(
-                      width: width,
-                      child: _DestinationCard(
-                        recommendation: recommendation,
-                        strings: strings,
-                      ),
+      padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                width: 48,
+                height: 48,
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.primaryContainer,
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                child: Icon(
+                  Icons.luggage_rounded,
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _SectionEyebrow(label: strings.stepResults),
+                    const SizedBox(height: 6),
+                    Text(
+                      strings.resultsTitle,
+                      style: Theme.of(context).textTheme.headlineMedium
+                          ?.copyWith(fontWeight: FontWeight.w900),
                     ),
-                  )
-                  .toList(),
-            );
-          },
-        ),
-        const SizedBox(height: 22),
-        Wrap(
-          spacing: 12,
-          runSpacing: 12,
-          children: [
-            OutlinedButton.icon(
-              onPressed: onEdit,
-              icon: const Icon(Icons.tune),
-              label: Text(strings.editPreferences),
-            ),
-            FilledButton.tonalIcon(
-              onPressed: onRefresh,
-              icon: const Icon(Icons.refresh),
-              label: Text(strings.newRecommendations),
-            ),
-          ],
-        ),
-      ],
+                    const SizedBox(height: 6),
+                    Text(strings.resultsSubtitle),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 24),
+          LayoutBuilder(
+            builder: (context, constraints) {
+              final columns = constraints.maxWidth >= 980
+                  ? 3
+                  : constraints.maxWidth >= 640
+                  ? 2
+                  : 1;
+              final width =
+                  (constraints.maxWidth - ((columns - 1) * 18)) / columns;
+              return Wrap(
+                spacing: 18,
+                runSpacing: 18,
+                children: recommendations.indexed
+                    .map(
+                      (entry) => SizedBox(
+                        width: width,
+                        child: _DestinationCard(
+                          rank: entry.$1 + 1,
+                          recommendation: entry.$2,
+                          strings: strings,
+                        ),
+                      ),
+                    )
+                    .toList(),
+              );
+            },
+          ),
+          const SizedBox(height: 24),
+          Wrap(
+            spacing: 12,
+            runSpacing: 12,
+            children: [
+              OutlinedButton.icon(
+                onPressed: onEdit,
+                icon: const Icon(Icons.tune_rounded),
+                label: Text(strings.editPreferences),
+              ),
+              FilledButton.icon(
+                onPressed: onRefresh,
+                icon: const Icon(Icons.refresh_rounded),
+                label: Text(strings.newRecommendations),
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }
 
 class _DestinationCard extends StatelessWidget {
-  const _DestinationCard({required this.recommendation, required this.strings});
+  const _DestinationCard({
+    required this.rank,
+    required this.recommendation,
+    required this.strings,
+  });
 
+  final int rank;
   final DestinationRecommendation recommendation;
   final AppLocalizations strings;
 
@@ -637,6 +801,7 @@ class _DestinationCard extends StatelessWidget {
           _DestinationImage(
             photo: recommendation.photo,
             label: recommendation.city,
+            badge: strings.matchNumber(rank),
             strings: strings,
           ),
           Padding(
@@ -644,11 +809,35 @@ class _DestinationCard extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  '${recommendation.city} · ${recommendation.countryCode}',
-                  style: Theme.of(
-                    context,
-                  ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w900),
+                Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        recommendation.city,
+                        style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                          fontWeight: FontWeight.w900,
+                        ),
+                      ),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 9,
+                        vertical: 5,
+                      ),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFF1F4F0),
+                        borderRadius: BorderRadius.circular(99),
+                      ),
+                      child: Text(
+                        recommendation.countryCode,
+                        style: const TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w800,
+                          letterSpacing: 0.6,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
                 const SizedBox(height: 10),
                 Text(
@@ -668,9 +857,12 @@ class _DestinationCard extends StatelessWidget {
                     padding: const EdgeInsets.only(bottom: 6),
                     child: InkWell(
                       onTap: () => _open(context, highlight.mapsUri),
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: BorderRadius.circular(12),
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 5),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 7,
+                        ),
                         child: Row(
                           children: [
                             Icon(
@@ -716,12 +908,26 @@ class _DestinationImage extends StatelessWidget {
   const _DestinationImage({
     required this.photo,
     required this.label,
+    required this.badge,
     required this.strings,
   });
 
   final PlacePhoto photo;
   final String label;
+  final String badge;
   final AppLocalizations strings;
+
+  Future<void> _openSource(BuildContext context) async {
+    final opened = await launchUrl(
+      Uri.parse(photo.sourceUrl),
+      webOnlyWindowName: '_blank',
+    );
+    if (!opened && context.mounted) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(strings.photoSourceError)));
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -759,16 +965,97 @@ class _DestinationImage extends StatelessWidget {
               errorBuilder: (_, _, _) => fallback,
             ),
           ),
+        Positioned(
+          left: 12,
+          top: 12,
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 11, vertical: 7),
+            decoration: BoxDecoration(
+              color: Colors.white.withValues(alpha: 0.94),
+              borderRadius: BorderRadius.circular(99),
+              boxShadow: const [
+                BoxShadow(
+                  color: Color(0x26000000),
+                  blurRadius: 12,
+                  offset: Offset(0, 4),
+                ),
+              ],
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  Icons.auto_awesome_rounded,
+                  size: 14,
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+                const SizedBox(width: 5),
+                Text(
+                  badge,
+                  style: const TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
         if (photo.attribution.isNotEmpty)
           Positioned(
+            left: 8,
             right: 8,
             bottom: 8,
-            child: Container(
-              color: Colors.black.withValues(alpha: 0.65),
-              padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 4),
-              child: Text(
-                photo.attribution,
-                style: const TextStyle(color: Colors.white, fontSize: 10),
+            child: Align(
+              alignment: Alignment.bottomRight,
+              child: Semantics(
+                button: photo.sourceUrl.isNotEmpty,
+                label: '${strings.photoSource}: ${photo.attribution}',
+                child: Tooltip(
+                  message: strings.photoSource,
+                  child: InkWell(
+                    key: Key('photoAttribution-$label'),
+                    onTap: photo.sourceUrl.isEmpty
+                        ? null
+                        : () => _openSource(context),
+                    borderRadius: BorderRadius.circular(6),
+                    child: Container(
+                      constraints: const BoxConstraints(maxWidth: 300),
+                      decoration: BoxDecoration(
+                        color: Colors.black.withValues(alpha: 0.72),
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 5,
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Flexible(
+                            child: Text(
+                              photo.attribution,
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 10,
+                              ),
+                            ),
+                          ),
+                          if (photo.sourceUrl.isNotEmpty) ...[
+                            const SizedBox(width: 5),
+                            const Icon(
+                              Icons.open_in_new,
+                              color: Colors.white,
+                              size: 12,
+                            ),
+                          ],
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
               ),
             ),
           ),
@@ -911,6 +1198,21 @@ class _FieldLabel extends StatelessWidget {
       context,
     ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w800),
   );
+}
+
+class _ChoiceField extends StatelessWidget {
+  const _ChoiceField({required this.label, required this.child});
+
+  final String label;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [_FieldLabel(label), const SizedBox(height: 10), child],
+    );
+  }
 }
 
 IconData _interestIcon(TravelInterest interest) => switch (interest) {

@@ -6,7 +6,8 @@ budget level, trip length, interests, and optional travel month.
 
 The Flutter client never receives Gemini credentials. A local Dart server
 validates requests, asks Gemini for destination cities and attraction names,
-and returns display-ready data with ordinary Google Maps search links.
+adds a freely licensed city image from Wikimedia Commons, and returns
+display-ready data with ordinary Google Maps search links.
 
 ## Requirements
 
@@ -54,6 +55,13 @@ USE_FAKE_APIS=false
 
 Keep the Gemini key out of Git and configure an appropriate quota before live
 testing. Google Maps search links do not require an API key.
+
+Destination photos come from the lead image of the matching English Wikipedia
+city article. The server reads the author, license, and source page from
+Wikimedia Commons and the app displays that attribution over the image. Image
+lookup requires no key; when no sufficiently attributed image is available,
+TripPick uses its built-in gradient placeholder. Attraction rows remain
+text-only.
 
 ## Verification
 

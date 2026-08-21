@@ -1,13 +1,22 @@
 class PlacePhoto {
-  const PlacePhoto({required this.url, required this.attribution});
+  const PlacePhoto({
+    required this.url,
+    required this.attribution,
+    this.sourceUrl = '',
+    this.licenseUrl = '',
+  });
 
   final String url;
   final String attribution;
+  final String sourceUrl;
+  final String licenseUrl;
 
   factory PlacePhoto.fromJson(Map<String, Object?> json) {
     return PlacePhoto(
       url: json['url'] as String? ?? '',
       attribution: json['attribution'] as String? ?? '',
+      sourceUrl: json['sourceUrl'] as String? ?? '',
+      licenseUrl: json['licenseUrl'] as String? ?? '',
     );
   }
 }

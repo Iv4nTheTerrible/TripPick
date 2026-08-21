@@ -88,18 +88,21 @@ class DestinationCandidate {
     required this.city,
     required this.countryCode,
     required this.reason,
+    required this.imageSearchTerm,
     this.highlights = const [],
   });
 
   final String city;
   final String countryCode;
   final String reason;
+  final String imageSearchTerm;
   final List<String> highlights;
 
   factory DestinationCandidate.fromJson(Map<String, Object?> json) {
     final city = (json['city'] as String? ?? '').trim();
     final country = (json['countryCode'] as String? ?? '').trim().toUpperCase();
     var reason = (json['reason'] as String? ?? '').trim();
+    final imageSearchTerm = (json['imageSearchTerm'] as String? ?? '').trim();
     final rawHighlights = json['highlights'];
     final highlights = rawHighlights is List
         ? rawHighlights
@@ -113,6 +116,7 @@ class DestinationCandidate {
     if (city.isEmpty ||
         !RegExp(r'^[A-Z]{2}$').hasMatch(country) ||
         reason.isEmpty ||
+        imageSearchTerm.isEmpty ||
         highlights.length != 3) {
       throw const FormatException('Invalid candidate.');
     }
@@ -121,6 +125,7 @@ class DestinationCandidate {
       city: city,
       countryCode: country,
       reason: reason,
+      imageSearchTerm: imageSearchTerm,
       highlights: highlights,
     );
   }
