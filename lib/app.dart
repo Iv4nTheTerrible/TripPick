@@ -60,6 +60,7 @@ class _TripPickAppState extends State<TripPickApp> {
       ],
       theme: ThemeData(
         colorScheme: colorScheme,
+        fontFamilyFallback: const ['NotoSansJP'],
         scaffoldBackgroundColor: const Color(0xFFF6F2E9),
         useMaterial3: true,
         textTheme: ThemeData.light().textTheme.apply(

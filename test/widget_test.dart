@@ -53,6 +53,56 @@ void main() {
     expect(savedLanguage, 'en');
   });
 
+  testWidgets('shows invalid trip days while keeping submission disabled', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      const TripPickApp(
+        initialLocale: Locale('en'),
+        repository: FakeRecommendationRepository(delay: Duration.zero),
+      ),
+    );
+
+    final days = find.byKey(const Key('tripDays'));
+    final submit = find.byKey(const Key('submitPreferences'));
+    for (final invalidValue in ['0', '', '31']) {
+      await tester.enterText(days, invalidValue);
+      await tester.pump();
+      expect(find.text('Enter a number from 1 to 30.'), findsOneWidget);
+      expect(tester.widget<FilledButton>(submit).onPressed, isNull);
+    }
+
+    await tester.enterText(days, '4');
+    await tester.pump();
+    expect(find.text('Enter a number from 1 to 30.'), findsNothing);
+    expect(tester.widget<FilledButton>(submit).onPressed, isNotNull);
+  });
+
+  testWidgets('keeps budget labels on one line at mobile width', (
+    tester,
+  ) async {
+    await tester.binding.setSurfaceSize(const Size(390, 844));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+
+    await tester.pumpWidget(
+      const TripPickApp(
+        initialLocale: Locale('en'),
+        repository: FakeRecommendationRepository(delay: Duration.zero),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    final budget = find.byKey(const Key('budgetLevel'));
+    expect(
+      find.descendant(of: budget, matching: find.byType(FittedBox)),
+      findsNWidgets(3),
+    );
+    for (final label in ['Low', 'Medium', 'High']) {
+      expect(tester.widget<Text>(find.text(label)).maxLines, 1);
+    }
+    expect(tester.takeException(), isNull);
+  });
+
   testWidgets('renders a city photo with clickable Commons attribution', (
     tester,
   ) async {

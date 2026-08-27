@@ -208,6 +208,7 @@ class _HomePageState extends State<HomePage> {
                         width: fieldWidth,
                         child: DropdownButtonFormField<String>(
                           key: const Key('originCountry'),
+                          isExpanded: true,
                           initialValue: _originCountry,
                           decoration: InputDecoration(
                             labelText: strings.originCountry,
@@ -235,6 +236,7 @@ class _HomePageState extends State<HomePage> {
                         child: TextFormField(
                           key: const Key('tripDays'),
                           controller: _daysController,
+                          autovalidateMode: AutovalidateMode.onUserInteraction,
                           keyboardType: TextInputType.number,
                           decoration: InputDecoration(
                             labelText: strings.tripDays,
@@ -290,15 +292,24 @@ class _HomePageState extends State<HomePage> {
                         segments: [
                           ButtonSegment(
                             value: BudgetLevel.low,
-                            label: Text(strings.low),
+                            label: FittedBox(
+                              fit: BoxFit.scaleDown,
+                              child: Text(strings.low, maxLines: 1),
+                            ),
                           ),
                           ButtonSegment(
                             value: BudgetLevel.medium,
-                            label: Text(strings.medium),
+                            label: FittedBox(
+                              fit: BoxFit.scaleDown,
+                              child: Text(strings.medium, maxLines: 1),
+                            ),
                           ),
                           ButtonSegment(
                             value: BudgetLevel.high,
-                            label: Text(strings.high),
+                            label: FittedBox(
+                              fit: BoxFit.scaleDown,
+                              child: Text(strings.high, maxLines: 1),
+                            ),
                           ),
                         ],
                         selected: {_budget},
@@ -405,13 +416,16 @@ class _HomePageState extends State<HomePage> {
                   icon: const Icon(Icons.auto_awesome_rounded),
                   label: Padding(
                     padding: const EdgeInsets.symmetric(vertical: 13),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(strings.findDestinations),
-                        const SizedBox(width: 8),
-                        const Icon(Icons.arrow_forward_rounded, size: 18),
-                      ],
+                    child: FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(strings.findDestinations),
+                          const SizedBox(width: 8),
+                          const Icon(Icons.arrow_forward_rounded, size: 18),
+                        ],
+                      ),
                     ),
                   ),
                 ),

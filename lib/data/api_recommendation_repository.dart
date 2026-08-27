@@ -32,16 +32,28 @@ class ApiRecommendationRepository implements RecommendationRepository {
           )
           .timeout(timeout);
 
-      final decoded = jsonDecode(response.body);
       if (response.statusCode != 200) {
+        Object? decoded;
+        try {
+          decoded = jsonDecode(response.body);
+        } on FormatException {
+          decoded = null;
+        }
         final error = decoded is Map ? decoded['error'] : null;
         final errorMap = error is Map ? error : const {};
+        final message = errorMap['message'];
+        final retryable = errorMap['retryable'];
         throw RecommendationException(
           kind: RecommendationFailureKind.server,
-          message: errorMap['message'] as String? ?? '',
-          retryable: errorMap['retryable'] as bool? ?? true,
+          message: message is String ? message : '',
+          retryable: retryable is bool
+              ? retryable
+              : response.statusCode == 408 ||
+                    response.statusCode == 429 ||
+                    response.statusCode >= 500,
         );
       }
+      final decoded = jsonDecode(response.body);
       if (decoded is! Map || decoded['recommendations'] is! List) {
         throw const RecommendationException(
           kind: RecommendationFailureKind.invalidResponse,

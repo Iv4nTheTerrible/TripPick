@@ -1,0 +1,21 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "TripPick (Flutter)",
+      "request": "launch",
+      "type": "dart",
+      "deviceId": "chrome",
+      "toolArgs": ["--web-port", "3000"],
+      "program": "lib/main.dart",
+      "cwd": "${workspaceFolder}"
+    },
+    {
+      "name": "TripPick Server",
+      "request": "launch",
+      "type": "dart",
+      "program": "server/bin/server.dart",
+      "cwd": "${workspaceFolder}/server"
+    }
+  ]
+}
