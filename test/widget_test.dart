@@ -5,6 +5,7 @@ import 'package:travel_recommender/data/fake_recommendation_repository.dart';
 import 'package:travel_recommender/data/recommendation_repository.dart';
 import 'package:travel_recommender/domain/recommendation.dart';
 import 'package:travel_recommender/domain/travel_preferences.dart';
+import 'package:travel_recommender/theme/trip_pick_theme.dart';
 
 void main() {
   testWidgets('renders the English form and three fake recommendations', (
@@ -17,7 +18,7 @@ void main() {
       ),
     );
 
-    expect(find.text('Not sure where to go next?'), findsOneWidget);
+    expect(find.text('Three places worth considering.'), findsOneWidget);
     expect(find.byKey(const Key('submitPreferences')), findsOneWidget);
 
     await tester.ensureVisible(find.byKey(const Key('submitPreferences')));
@@ -29,7 +30,7 @@ void main() {
     expect(find.text('Kyoto'), findsOneWidget);
     expect(find.text('Kanazawa'), findsOneWidget);
     expect(find.text('Sapporo'), findsOneWidget);
-    expect(find.text('Match #1'), findsOneWidget);
+    expect(find.text('01'), findsOneWidget);
     expect(find.text('Open in Google Maps'), findsNWidgets(3));
   });
 
@@ -45,12 +46,41 @@ void main() {
       ),
     );
 
-    expect(find.text('次の旅先が決まらない？'), findsOneWidget);
-    await tester.tap(find.text('EN'));
+    expect(find.text('次の旅に、ちょうどいい3都市。'), findsOneWidget);
+    await tester.tap(find.byKey(const Key('languageMenu')));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('English'));
     await tester.pumpAndSettle();
 
-    expect(find.text('Not sure where to go next?'), findsOneWidget);
+    expect(find.text('Three places worth considering.'), findsOneWidget);
     expect(savedLanguage, 'en');
+  });
+
+  testWidgets('switches and reports the selected theme mode', (tester) async {
+    ThemeMode? savedThemeMode;
+    await tester.pumpWidget(
+      TripPickApp(
+        initialLocale: const Locale('en'),
+        initialThemeMode: ThemeMode.light,
+        repository: const FakeRecommendationRepository(delay: Duration.zero),
+        onThemeModeChanged: (mode) async => savedThemeMode = mode,
+      ),
+    );
+
+    expect(
+      tester.widget<MaterialApp>(find.byType(MaterialApp)).themeMode,
+      ThemeMode.light,
+    );
+    await tester.tap(find.byKey(const Key('themeModeMenu')));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const Key('themeMode-dark')));
+    await tester.pumpAndSettle();
+
+    expect(savedThemeMode, ThemeMode.dark);
+    expect(
+      tester.widget<MaterialApp>(find.byType(MaterialApp)).themeMode,
+      ThemeMode.dark,
+    );
   });
 
   testWidgets('shows invalid trip days while keeping submission disabled', (
@@ -123,6 +153,98 @@ void main() {
     expect(attribution, findsOneWidget);
     expect(tester.widget<InkWell>(attribution).onTap, isNotNull);
     expect(find.text('Author · CC BY-SA 4.0'), findsNWidgets(3));
+  });
+
+  testWidgets('interest tiles keep explicit readable colors in dark mode', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      const TripPickApp(
+        initialLocale: Locale('en'),
+        initialThemeMode: ThemeMode.dark,
+        repository: FakeRecommendationRepository(delay: Duration.zero),
+      ),
+    );
+
+    final selectedTile = find.byKey(const Key('interest-food'));
+    final unselectedTile = find.byKey(const Key('interest-nature'));
+    final selectedLabel = tester.widget<Text>(
+      find.descendant(of: selectedTile, matching: find.text('Food')),
+    );
+    final unselectedLabel = tester.widget<Text>(
+      find.descendant(of: unselectedTile, matching: find.text('Nature')),
+    );
+
+    expect(selectedLabel.style?.color, TripPickPalette.dark.onSelection);
+    expect(unselectedLabel.style?.color, TripPickPalette.dark.text);
+
+    await tester.ensureVisible(unselectedTile);
+    await tester.pumpAndSettle();
+    await tester.tap(unselectedTile);
+    await tester.pump();
+
+    final newlySelectedLabel = tester.widget<Text>(
+      find.descendant(of: unselectedTile, matching: find.text('Nature')),
+    );
+    expect(newlySelectedLabel.style?.color, TripPickPalette.dark.onSelection);
+  });
+
+  testWidgets('bundles the hero photo and exposes its source attribution', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      const TripPickApp(
+        initialLocale: Locale('en'),
+        repository: FakeRecommendationRepository(delay: Duration.zero),
+      ),
+    );
+
+    expect(find.byKey(const Key('heroPhoto')), findsOneWidget);
+    expect(find.byKey(const Key('heroPhotoAttribution')), findsOneWidget);
+    expect(find.text('Mashkawat Ahsan · CC BY-SA 4.0'), findsOneWidget);
+  });
+
+  testWidgets('vivid layout stays overflow-free at supported widths', (
+    tester,
+  ) async {
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+    for (final size in const [
+      Size(390, 844),
+      Size(768, 1024),
+      Size(1280, 900),
+    ]) {
+      await tester.binding.setSurfaceSize(size);
+      await tester.pumpWidget(
+        const TripPickApp(
+          initialLocale: Locale('ja'),
+          initialThemeMode: ThemeMode.dark,
+          repository: FakeRecommendationRepository(delay: Duration.zero),
+        ),
+      );
+      await tester.pumpAndSettle();
+      expect(tester.takeException(), isNull, reason: 'Overflow at $size');
+    }
+  });
+
+  testWidgets('desktop form no longer covers the hero photograph', (
+    tester,
+  ) async {
+    await tester.binding.setSurfaceSize(const Size(1280, 900));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+
+    await tester.pumpWidget(
+      const TripPickApp(
+        initialLocale: Locale('en'),
+        initialThemeMode: ThemeMode.dark,
+        repository: FakeRecommendationRepository(delay: Duration.zero),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    final hero = tester.getRect(find.byKey(const Key('travelHero')));
+    final form = tester.getRect(find.byKey(const Key('planningFormSurface')));
+    expect(form.top, greaterThanOrEqualTo(hero.bottom + 20));
+    expect(tester.takeException(), isNull);
   });
 }
 

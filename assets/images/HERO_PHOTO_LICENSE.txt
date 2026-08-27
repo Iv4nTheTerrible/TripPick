@@ -1,0 +1,12 @@
+TripPick hero photograph
+
+Title: Mountains & clouds from plane window
+Author: Mashkawat Ahsan (Wikimedia Commons user Mashkawat.ahsan)
+Source: https://commons.wikimedia.org/wiki/File:Mountains_%26_clouds_from_plane_window.jpg
+License: Creative Commons Attribution-ShareAlike 4.0 International
+License URL: https://creativecommons.org/licenses/by-sa/4.0/
+
+The bundled 1280 x 960 JPEG is a resized Wikimedia Commons derivative of the
+original photograph. The application crops it responsively and applies a color
+overlay at display time. This attribution file and the visible in-app source
+link identify the author, source, license, and modifications.

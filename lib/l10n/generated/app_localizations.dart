@@ -107,50 +107,62 @@ abstract class AppLocalizations {
   /// No description provided for @appTagline.
   ///
   /// In en, this message translates to:
-  /// **'Three places that fit your trip'**
+  /// **'A thoughtful shortlist for your next trip'**
   String get appTagline;
 
   /// No description provided for @heroTitle.
   ///
   /// In en, this message translates to:
-  /// **'Not sure where to go next?'**
+  /// **'Three places worth considering.'**
   String get heroTitle;
 
   /// No description provided for @heroBody.
   ///
   /// In en, this message translates to:
-  /// **'Tell us what kind of trip you want. TripPick will suggest three cities and explain why each one fits.'**
+  /// **'Choose how you want to travel. We’ll narrow the possibilities to three cities, with clear reasons and places to begin.'**
   String get heroBody;
 
-  /// No description provided for @heroBadge.
+  /// No description provided for @heroKicker.
   ///
   /// In en, this message translates to:
-  /// **'PERSONAL TRIP FINDER'**
-  String get heroBadge;
+  /// **'A considered way to choose'**
+  String get heroKicker;
 
-  /// No description provided for @quickSetup.
+  /// No description provided for @heroSummary.
   ///
   /// In en, this message translates to:
-  /// **'Takes less than a minute'**
-  String get quickSetup;
-
-  /// No description provided for @threeMatches.
-  ///
-  /// In en, this message translates to:
-  /// **'Three tailored city matches'**
-  String get threeMatches;
-
-  /// No description provided for @realPlaces.
-  ///
-  /// In en, this message translates to:
-  /// **'Real photos and map links'**
-  String get realPlaces;
+  /// **'A few preferences  ·  Three cities  ·  Real places'**
+  String get heroSummary;
 
   /// No description provided for @language.
   ///
   /// In en, this message translates to:
   /// **'Language'**
   String get language;
+
+  /// No description provided for @appearance.
+  ///
+  /// In en, this message translates to:
+  /// **'Appearance'**
+  String get appearance;
+
+  /// No description provided for @themeSystem.
+  ///
+  /// In en, this message translates to:
+  /// **'Use device setting'**
+  String get themeSystem;
+
+  /// No description provided for @themeLight.
+  ///
+  /// In en, this message translates to:
+  /// **'Light'**
+  String get themeLight;
+
+  /// No description provided for @themeDark.
+  ///
+  /// In en, this message translates to:
+  /// **'Dark'**
+  String get themeDark;
 
   /// No description provided for @english.
   ///
@@ -167,13 +179,13 @@ abstract class AppLocalizations {
   /// No description provided for @preferencesTitle.
   ///
   /// In en, this message translates to:
-  /// **'Your travel preferences'**
+  /// **'Shape your shortlist'**
   String get preferencesTitle;
 
   /// No description provided for @preferencesSubtitle.
   ///
   /// In en, this message translates to:
-  /// **'A few details are enough. Budget is used as a general preference, not an exact price estimate.'**
+  /// **'Tell us where you are starting, how long you have, and what matters most.'**
   String get preferencesSubtitle;
 
   /// No description provided for @originCountry.
@@ -305,7 +317,7 @@ abstract class AppLocalizations {
   /// No description provided for @findDestinations.
   ///
   /// In en, this message translates to:
-  /// **'Find my destinations'**
+  /// **'Build my shortlist'**
   String get findDestinations;
 
   /// No description provided for @requiredField.
@@ -335,20 +347,14 @@ abstract class AppLocalizations {
   /// No description provided for @resultsTitle.
   ///
   /// In en, this message translates to:
-  /// **'Your recommended destinations'**
+  /// **'Three places to consider'**
   String get resultsTitle;
 
   /// No description provided for @resultsSubtitle.
   ///
   /// In en, this message translates to:
-  /// **'Three ideas selected from your preferences. Open any place in Google Maps to explore further.'**
+  /// **'Chosen from your preferences, with a few places to start exploring.'**
   String get resultsSubtitle;
-
-  /// No description provided for @matchNumber.
-  ///
-  /// In en, this message translates to:
-  /// **'Match #{rank}'**
-  String matchNumber(int rank);
 
   /// No description provided for @highlights.
   ///
@@ -365,7 +371,7 @@ abstract class AppLocalizations {
   /// No description provided for @editPreferences.
   ///
   /// In en, this message translates to:
-  /// **'Edit preferences'**
+  /// **'Adjust preferences'**
   String get editPreferences;
 
   /// No description provided for @tryAgain.
@@ -377,7 +383,7 @@ abstract class AppLocalizations {
   /// No description provided for @newRecommendations.
   ///
   /// In en, this message translates to:
-  /// **'New recommendations'**
+  /// **'Try three more'**
   String get newRecommendations;
 
   /// No description provided for @errorTitle.
@@ -443,13 +449,13 @@ abstract class AppLocalizations {
   /// No description provided for @stepPreferences.
   ///
   /// In en, this message translates to:
-  /// **'1. Preferences'**
+  /// **'Your trip'**
   String get stepPreferences;
 
   /// No description provided for @stepResults.
   ///
   /// In en, this message translates to:
-  /// **'2. Recommendations'**
+  /// **'Your shortlist'**
   String get stepResults;
 
   /// No description provided for @month1.

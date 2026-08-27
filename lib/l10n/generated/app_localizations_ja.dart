@@ -12,28 +12,34 @@ class AppLocalizationsJa extends AppLocalizations {
   String get appName => '旅先ピック';
 
   @override
-  String get appTagline => 'あなたに合う3つの旅先';
+  String get appTagline => '次の旅を、3つの候補から';
 
   @override
-  String get heroTitle => '次の旅先が決まらない？';
+  String get heroTitle => '次の旅に、ちょうどいい3都市。';
 
   @override
-  String get heroBody => '希望する旅のスタイルを教えてください。あなたに合う3つの都市と、その理由を提案します。';
+  String get heroBody => '旅の条件を選ぶと、あなたに合う3都市を、理由と最初に訪れたい場所とともに提案します。';
 
   @override
-  String get heroBadge => 'あなた専用の旅先検索';
+  String get heroKicker => '旅先を、丁寧に絞る';
 
   @override
-  String get quickSetup => '入力は1分以内';
-
-  @override
-  String get threeMatches => 'あなたに合う3つの都市';
-
-  @override
-  String get realPlaces => '実際の写真と地図リンク';
+  String get heroSummary => 'いくつかの条件  ・  3つの都市  ・  実際の場所';
 
   @override
   String get language => '言語';
+
+  @override
+  String get appearance => '表示設定';
+
+  @override
+  String get themeSystem => '端末の設定を使う';
+
+  @override
+  String get themeLight => 'ライト';
+
+  @override
+  String get themeDark => 'ダーク';
 
   @override
   String get english => 'English';
@@ -42,11 +48,10 @@ class AppLocalizationsJa extends AppLocalizations {
   String get japanese => '日本語';
 
   @override
-  String get preferencesTitle => '旅行の希望条件';
+  String get preferencesTitle => '旅の条件を決める';
 
   @override
-  String get preferencesSubtitle =>
-      'いくつかの条件を選ぶだけです。予算は目安として利用し、正確な料金を計算するものではありません。';
+  String get preferencesSubtitle => '出発地、日数、旅で大切にしたいことを教えてください。';
 
   @override
   String get originCountry => '出発国';
@@ -112,7 +117,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get anyMonth => '指定なし';
 
   @override
-  String get findDestinations => 'おすすめの旅先を探す';
+  String get findDestinations => '3つの候補を見る';
 
   @override
   String get requiredField => 'この項目は必須です。';
@@ -127,15 +132,10 @@ class AppLocalizationsJa extends AppLocalizations {
   String get loadingBody => '希望条件に合う旅先の候補を比較しています。';
 
   @override
-  String get resultsTitle => 'おすすめの旅先';
+  String get resultsTitle => '次の旅先、3つの候補';
 
   @override
-  String get resultsSubtitle => '希望条件に合う3つの候補です。Google マップで詳しい情報を確認できます。';
-
-  @override
-  String matchNumber(int rank) {
-    return '候補 #$rank';
-  }
+  String get resultsSubtitle => '選んだ条件をもとに、訪れたい場所とあわせて提案します。';
 
   @override
   String get highlights => 'おすすめスポット';
@@ -144,13 +144,13 @@ class AppLocalizationsJa extends AppLocalizations {
   String get openMaps => 'Google マップで開く';
 
   @override
-  String get editPreferences => '条件を編集';
+  String get editPreferences => '条件を見直す';
 
   @override
   String get tryAgain => 'もう一度試す';
 
   @override
-  String get newRecommendations => '別の候補を見る';
+  String get newRecommendations => '別の3都市を見る';
 
   @override
   String get errorTitle => '検索を完了できませんでした';
@@ -184,10 +184,10 @@ class AppLocalizationsJa extends AppLocalizations {
   String get budgetNote => '予算は目安です。航空券、ホテル、正確な旅行費用は含まれません。';
 
   @override
-  String get stepPreferences => '1. 希望条件';
+  String get stepPreferences => '旅の条件';
 
   @override
-  String get stepResults => '2. おすすめ';
+  String get stepResults => '旅先候補';
 
   @override
   String get month1 => '1月';

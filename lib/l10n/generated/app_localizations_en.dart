@@ -12,29 +12,36 @@ class AppLocalizationsEn extends AppLocalizations {
   String get appName => 'TripPick';
 
   @override
-  String get appTagline => 'Three places that fit your trip';
+  String get appTagline => 'A thoughtful shortlist for your next trip';
 
   @override
-  String get heroTitle => 'Not sure where to go next?';
+  String get heroTitle => 'Three places worth considering.';
 
   @override
   String get heroBody =>
-      'Tell us what kind of trip you want. TripPick will suggest three cities and explain why each one fits.';
+      'Choose how you want to travel. We’ll narrow the possibilities to three cities, with clear reasons and places to begin.';
 
   @override
-  String get heroBadge => 'PERSONAL TRIP FINDER';
+  String get heroKicker => 'A considered way to choose';
 
   @override
-  String get quickSetup => 'Takes less than a minute';
-
-  @override
-  String get threeMatches => 'Three tailored city matches';
-
-  @override
-  String get realPlaces => 'Real photos and map links';
+  String get heroSummary =>
+      'A few preferences  ·  Three cities  ·  Real places';
 
   @override
   String get language => 'Language';
+
+  @override
+  String get appearance => 'Appearance';
+
+  @override
+  String get themeSystem => 'Use device setting';
+
+  @override
+  String get themeLight => 'Light';
+
+  @override
+  String get themeDark => 'Dark';
 
   @override
   String get english => 'English';
@@ -43,11 +50,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get japanese => '日本語';
 
   @override
-  String get preferencesTitle => 'Your travel preferences';
+  String get preferencesTitle => 'Shape your shortlist';
 
   @override
   String get preferencesSubtitle =>
-      'A few details are enough. Budget is used as a general preference, not an exact price estimate.';
+      'Tell us where you are starting, how long you have, and what matters most.';
 
   @override
   String get originCountry => 'Origin country';
@@ -113,7 +120,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get anyMonth => 'Any month';
 
   @override
-  String get findDestinations => 'Find my destinations';
+  String get findDestinations => 'Build my shortlist';
 
   @override
   String get requiredField => 'This field is required.';
@@ -129,16 +136,11 @@ class AppLocalizationsEn extends AppLocalizations {
       'We are matching your preferences with destination ideas.';
 
   @override
-  String get resultsTitle => 'Your recommended destinations';
+  String get resultsTitle => 'Three places to consider';
 
   @override
   String get resultsSubtitle =>
-      'Three ideas selected from your preferences. Open any place in Google Maps to explore further.';
-
-  @override
-  String matchNumber(int rank) {
-    return 'Match #$rank';
-  }
+      'Chosen from your preferences, with a few places to start exploring.';
 
   @override
   String get highlights => 'Highlights';
@@ -147,13 +149,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get openMaps => 'Open in Google Maps';
 
   @override
-  String get editPreferences => 'Edit preferences';
+  String get editPreferences => 'Adjust preferences';
 
   @override
   String get tryAgain => 'Try again';
 
   @override
-  String get newRecommendations => 'New recommendations';
+  String get newRecommendations => 'Try three more';
 
   @override
   String get errorTitle => 'We could not finish this search';
@@ -190,10 +192,10 @@ class AppLocalizationsEn extends AppLocalizations {
       'Budget is a soft preference and does not include flights, hotels, or exact trip costs.';
 
   @override
-  String get stepPreferences => '1. Preferences';
+  String get stepPreferences => 'Your trip';
 
   @override
-  String get stepResults => '2. Recommendations';
+  String get stepResults => 'Your shortlist';
 
   @override
   String get month1 => 'January';

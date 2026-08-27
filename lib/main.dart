@@ -10,6 +10,11 @@ Future<void> main() async {
   final preferences = await SharedPreferences.getInstance();
   final savedLanguage = preferences.getString('languageCode');
   final initialLocale = savedLanguage == null ? null : Locale(savedLanguage);
+  final savedThemeMode = preferences.getString('themeMode');
+  final initialThemeMode = ThemeMode.values.firstWhere(
+    (mode) => mode.name == savedThemeMode,
+    orElse: () => ThemeMode.system,
+  );
   const useFakeRepository = bool.fromEnvironment(
     'USE_FAKE_REPOSITORY',
     defaultValue: false,
@@ -22,11 +27,15 @@ Future<void> main() async {
   runApp(
     TripPickApp(
       initialLocale: initialLocale,
+      initialThemeMode: initialThemeMode,
       repository: useFakeRepository
           ? const FakeRecommendationRepository()
           : ApiRecommendationRepository(baseUrl: backendBaseUrl),
       onLocaleChanged: (locale) async {
         await preferences.setString('languageCode', locale.languageCode);
+      },
+      onThemeModeChanged: (mode) async {
+        await preferences.setString('themeMode', mode.name);
       },
     ),
   );

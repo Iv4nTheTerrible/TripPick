@@ -64,6 +64,10 @@ flutter:
   # the material Icons class.
   uses-material-design: true
 
+  assets:
+    - assets/images/trip_pick_hero.jpg
+    - assets/images/HERO_PHOTO_LICENSE.txt
+
   fonts:
     - family: NotoSansJP
       fonts:
